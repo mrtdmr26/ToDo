@@ -37,7 +37,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
+    'api',
+    'todos'
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+##        'rest_framework.permissions.AllowAny',
+          'rest_framework.permissions.IsAuthenticated',
+    ]
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -73,10 +85,17 @@ WSGI_APPLICATION = 'ToDoProject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+#Connection string for PostgreSQL
+#I created a free ElephantSQL DB For this project :)
+#There is a little latency in system because of Free Servers are located in Stockholm
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'siqxmwyf',
+        'USER': 'siqxmwyf',
+        'PASSWORD': '35TxWIVebaUQqE-8HfgSbB7WHGunUZrZ',
+        'HOST': 'balarama.db.elephantsql.com',
+        'PORT': '5432',
     }
 }
 
