@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '0h2k&qwz^f)kfbu*!9$w42t$6j39hgedxp^z)n!^vr#6==jy&)'
+SECRET_KEY = 'eo4w($qct-4!1uqt2hqk&@xme+8j5ohs@v_nlchg*3vz!s4^5-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
+    'rest_framework',
+    'backend'
 ]
 
 MIDDLEWARE = [
@@ -47,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
 ]
 
 ROOT_URLCONF = 'ToDo.urls'
@@ -73,10 +77,17 @@ WSGI_APPLICATION = 'ToDo.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+#Connection string for PostgreSQL
+#I created a free ElephantSQL DB For this project :)
+#There is a little latency because of Free Servers are located in Stockholm
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'siqxmwyf',
+        'USER': 'siqxmwyf',
+        'PASSWORD': '35TxWIVebaUQqE-8HfgSbB7WHGunUZrZ',
+        'HOST': 'balarama.db.elephantsql.com',
+        'PORT': '5432',
     }
 }
 
@@ -118,3 +129,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Localhost port 3000 is will be our frontend port
+CORS_ORIGIN_WHITELIST = (
+    'localhost:3000/'
+)
