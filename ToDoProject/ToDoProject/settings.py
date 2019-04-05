@@ -41,13 +41,16 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_auth',
     'api',
-    'todos'
+    'todos',
+    'home'
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-##        'rest_framework.permissions.AllowAny',
-          'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
     ]
 }
 
@@ -85,20 +88,34 @@ WSGI_APPLICATION = 'ToDoProject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-#Connection string for PostgreSQL
-#I created a free ElephantSQL DB For this project :)
-#There is a little latency in system because of Free Servers are located in Stockholm
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'siqxmwyf',
-        'USER': 'siqxmwyf',
-        'PASSWORD': '35TxWIVebaUQqE-8HfgSbB7WHGunUZrZ',
-        'HOST': 'balarama.db.elephantsql.com',
-        'PORT': '5432',
-    }
-}
+DB = 'local'
 
+if DB == 'local':
+
+    #Connection string for PostgreSQL
+    #I created a free ElephantSQL DB For this project :)
+    #There is a little latency in system because of Free Servers are located in Stockholm
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'test',
+            'USER': 'postgres',
+            'PASSWORD': 'PASSWORD',
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'siqxmwyf',
+            'USER': 'siqxmwyf',
+            'PASSWORD': '35TxWIVebaUQqE-8HfgSbB7WHGunUZrZ',
+            'HOST': 'balarama.db.elephantsql.com',
+            'PORT': '5432',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -124,7 +141,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Istanbul'
 
 USE_I18N = True
 
@@ -137,3 +154,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+LOGIN_REDIRECT_URL = 'home_main'
+LOGOUT_REDIRECT_URL = 'home_main'

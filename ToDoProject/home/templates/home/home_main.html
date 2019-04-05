@@ -1,0 +1,180 @@
+{% extends "home/header.html" %}
+
+{% block title %}Home{% endblock title %}
+
+{% load staticfiles%}
+{% block CSS %}
+<link rel="stylesheet" href="{% static 'home/css/open-iconic-bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'home/css/datetimepicker.css' %}">
+<script src="{% static 'home/js/moment-with-locales.js' %}"></script>
+<script src="{% static 'home/js/datetimepicker.js' %}"></script>
+{% endblock CSS %}
+
+{% block content %}
+
+<div class="accordion" id="accordion">
+    <div class="card">
+        <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseOne"
+                    aria-expanded="true" aria-controls="collapseOne">
+                    Add New ToDo
+                </button>
+            </h5>
+        </div>
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="Title_forInput">When you need ToDo? Give a deadline ToDo:</label>
+                        <div id="picker"> </div>
+                        <input name="DueDate_forInput" type="hidden" id="result" value="" required>
+                        <script type="text/javascript">
+                            $('#picker').dateTimePicker({
+                                selectData: "now",
+                                dateFormat: "DD-MM-YYYY HH:mm",
+                                showTime: false
+                            });
+                        </script>
+                    </div>
+                    <div class="form-group">
+                        <label for="Title_forInput">What you need ToDo? Give a title ToDo:</label>
+                        <input type="text" class="form-control" id="Title_forInput" name="Title_forInput"
+                            placeholder="Title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="TextArea_forInput">How you need ToDo? Give a description ToDo:</label>
+                        <textarea class="form-control" id="TextArea_forInput" name="TextArea_forInput" rows="3"
+                            required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" name="create_button">Create</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingTwo">
+            <h5 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    Waiting ToDo List
+                </button>
+            </h5>
+        </div>
+        <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordion">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="list-group ">
+                        {% for object in forFalse %}
+                        {% if object.completed == False %}
+                        <div class="list-group-item list-group-item-action">
+                            <div class="d-flex flex-row justify-content-between">
+                                <div class="p-2">
+                                    <h5 class="mb-1">{{ object.title }}</h5>
+                                </div>
+                                <div class="p-2">
+                                    <small class="text-muted">Deadline: {{ object.duedate }}</small>
+                                    <img src="{% static '/oi/svg/calendar.svg' %}" alt="calendar" height="16"
+                                        class="mr-1">
+                                </div>
+                            </div>
+                            <div class="d-flex flex-row justify-content-start">
+                                <div class="p-2">
+                                    <p class="mb-1">{{ object.description }}</p><br>
+                                    <small class="text-muted">Created @ {{ object.created }}</small>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-row-reverse mb-2">
+                                <button type="submit" class="btn btn-success p-2 ml-2" name="complete_button_ForFalse"
+                                    value="{{ object.id }}">
+                                    <img src="{% static '/oi/svg/check.svg' %}" alt="check" height="16"> Complete
+                                </button>
+                                <button type="submit" class="btn btn-secondary p-2 ml-2" name="delete_button"
+                                    value="{{ object.id }}">
+                                    <img src="{% static '/oi/svg/trash.svg' %}" alt="trash" height="16"> Delete
+                                </button>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% empty %}
+                        <div class="list-group-item list-group-item-action">
+                            <div class="d-flex flex-row justify-content-between">
+                                <div class="p-2">
+                                    <p class="mb-1">There is no Waiting ToDo</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingThree">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree"
+                    aria-expanded="false" aria-controls="collapseThree">
+                    Finished ToDo List
+                </button>
+            </h5>
+        </div>
+        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="list-group ">
+                        {% for object in forTrue %}
+                        {% if object.completed == True %}
+                        <div class="list-group-item list-group-item-action">
+                            <div class="d-flex flex-row justify-content-between">
+                                <div class="p-2">
+                                    <h5 class="mb-1">{{ object.title }}</h5>
+                                </div>
+                                <div class="p-2">
+                                    <small class="text-muted">Deadline: {{ object.duedate }}</small>
+                                    <img src="{% static '/oi/svg/calendar.svg' %}" alt="calendar" height="16"
+                                        class="mr-1">
+                                </div>
+                            </div>
+                            <div class="d-flex flex-row justify-content-start">
+                                <div class="p-2">
+                                    <p class="mb-1">{{ object.description }}</p><br>
+                                    <small class="text-muted">Created @ {{ object.created }}</small>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-row-reverse mb-2">
+                                <button type="submit" class="btn btn-warning p-2 ml-2" name="uncomplete_button_ForTrue"
+                                    value="{{ object.id }}">
+                                    <img src="{% static '/oi/svg/chevron-top.svg' %}" alt="chevron-top" height="16">
+                                    UnComplete
+                                </button>
+                                <button type="submit" class="btn btn-secondary p-2 ml-2" name="delete_button"
+                                    value="{{ object.id }}">
+                                    <img src="{% static '/oi/svg/trash.svg' %}" alt="trash" height="16"> Delete
+                                </button>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% empty %}
+                        <div class="list-group-item list-group-item-action">
+                            <div class="d-flex flex-row justify-content-between">
+                                <div class="p-2">
+                                    <p class="mb-1">There is no Completed ToDo</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+{% endblock js %}
